@@ -4,15 +4,15 @@ App where users can register, login and add tasks.
 
 DB : MongDB
 
-To run the app:
+# To run the app:
 
 node install
 
 npm run dev
 
-APIs:
+# APIs:
 
-To add users:
+# To add users:
 
 POST /users
 
@@ -22,7 +22,7 @@ POST /users
 	"password" : "any_password"
 }
 
-Header:
+# Header:
 
 {
   "Authorization" : "Bearer __token"
@@ -30,7 +30,7 @@ Header:
 
 __token generated via POST /users/login API
 
-To login:
+# To login:
 
 POST /users/login
 
@@ -54,7 +54,7 @@ Response:
     "token": "string"
 }
 
-To add tasks for a user:
+# To add tasks for a user:
 
 POST /tasks
 
@@ -75,15 +75,15 @@ Response:
     "__v": int
 }
 
-To logout:
+# To logout:
 
 POST /users/logout
 
-To logout of all sessions:
+# To logout of all sessions:
 
 POST /users/logoutAll
 
-To update user:
+# To update user:
 
 PATCH /users/me
 
@@ -91,7 +91,7 @@ PATCH /users/me
 	"age" : int  // or any parameter to be modified
 }
 
-To update task:
+# To update task:
 
 PATCH /tasks/{taskId}
 
@@ -99,16 +99,16 @@ PATCH /tasks/{taskId}
 	"description" : string
 }
 
-To upload a profile pic:
+# To upload a profile pic:
 
 POST /users/me/avatar
 
 form-data : "avatar" : choose any file to upload
 
-To delete a user:
+# To delete a user:
 
 DEL /users/{userId}
 
-To delete a task:
+# To delete a task:
 
 DEL /tasks/{taskId}
