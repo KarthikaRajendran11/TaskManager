@@ -79,7 +79,7 @@ router.patch('/users/me', auth, async (req, res) => {
         req.user[update] = req.body[update];
       });
       await req.user.save();
-      res.send(user)
+      res.send(req.user)
   } catch (e) {
       res.status(400).send(e)
   }
@@ -119,7 +119,7 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) 
 
 router.get('/users/:id/avatar', auth, async (req, res) => {
   try {
-    const user = await User.findById(user.param.id)  
+    const user = await User.findById(req.params.id)  
     if(!user){
      throw new Error();
     }

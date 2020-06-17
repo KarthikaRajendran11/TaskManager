@@ -4,10 +4,20 @@ App where users can register, login and add tasks.
 
 DB : MongDB
 
+- Download mongodb community server from https://www.mongodb.com/try/download/community and unzip and move to any location. 
+- Create another folder in the same directory 
+- Run the below command to start mongodb
+
+/Users/user/mongodb/bin/mongod --dbpath=/Users/user/mongodb-data
+
+Sendgrid:
+
+- Create an account at https://signup.sendgrid.com/ and create an API key and add to config file
+
 # To run the app:
 
 node install
-
+u
 npm run dev
 
 # APIs:
