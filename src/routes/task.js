@@ -56,7 +56,8 @@ router.get('/task/:id', auth, async (req, res) => {
       const task = await Task.findOne({_id, owner : req.user._id})
 
       if(!task){
-          res.status(404).send()
+          // no task found with this id
+          res.status(404).send(new err.task.InvalidTaskId());
       }
 
       res.status(200).send(task);
@@ -80,7 +81,7 @@ router.patch('/tasks/:id', auth, async (req, res) => {
       const task = await Task.findOne({owner : req.user._id, _id : req.params.id});
 
       if(!task){
-          res.status(400).send('Cannot find task');
+          res.status(400).send(new err.task.InvalidTaskId());
       }
 
       updates.forEach((update) => {
@@ -101,7 +102,7 @@ router.delete('/tasks/:id', auth, async (req, res) => {
         const task = await Task.findOneAndDelete({_id : req.params.id, owner : req.user._id});
 
         if(!task){
-          res.status(400).send('Could not find task');
+          res.status(400).send(new err.task.InvalidTaskId());
         }
 
         res.send(task);

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-const taskSchema = mongoose.Schema({
+const taskSchema = mongoose.Schema({  
     description : {
       type : String,
       required : true

@@ -3,7 +3,7 @@ const User = require('../models/user.js');
 const multer = require('multer');
 const email = require('../emails/account');
 const logger = require('../util/logger').getLogger('UserRoute');
-
+const err = require('../util/error');
 const router = new express.Router();
 const auth = require('../middleware/auth');
 
@@ -29,7 +29,7 @@ router.post('/users', async (req, res) => {
         res.status(201).send({user, token});
     } catch(e){
         logger.error(e);
-        res.status(400).send(e);
+        res.status(400).send(new err.user.invalidPassword());
     }
 
   });
@@ -41,7 +41,7 @@ router.post('/users/login', async (req, res) => {
         res.send({user, token});
       } catch(e) {
         logger.error(e);
-        res.status(400).send();
+        res.status(400).send(err.user.incorrentPassword());
       }
 });
 
@@ -54,7 +54,7 @@ router.post('/users/logout', auth, async (req, res) => {
         res.status(200).send()
     } catch(e) {
         logger.error(e);
-        res.status(500).send()
+        res.status(500).send(new err.Err())
     }
 });
 
@@ -65,7 +65,7 @@ router.post('/users/logoutAll', auth, async(req, res) => {
         res.send()
     } catch(e) {
         logger.error(e);
-        res.status(500).send()
+        res.status(500).send(new err.Err())
     }
 });
 
@@ -75,7 +75,8 @@ router.patch('/users/me', auth, async (req, res) => {
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
   if (!isValidOperation) {
-      return res.status(400).send({ error: 'Invalid updates!' })
+      
+      return res.status(400).send(new err.user.invalidUpdates());
   }
 
   try {
