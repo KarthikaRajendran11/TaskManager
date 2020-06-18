@@ -28,3 +28,5 @@ app.listen(port, () => {
 app.post('/upload', upload.single('upload'), (req, res) => {
   res.send();
 });
+
+module.exports = app;

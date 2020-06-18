@@ -12,5 +12,4 @@ Err.user.invalidUpdates = Err.user.extend('Invalid parameters updated', 404, 'In
 Err.task = Err.extend('Unexpected error', 500, 'Internal server error');
 Err.task.InvalidTaskId = Err.task.extend('No task with id', 404, 'Invalida task id');
 
-Err.task = Err.extend('')
 module.exports = Err;
