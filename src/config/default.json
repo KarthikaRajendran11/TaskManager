@@ -1,0 +1,12 @@
+{
+    "port" : 8080,
+    "sendGrid" : {
+        "sendgridAPIKey" : "__REPLACE__ME__",
+        "fromEmail" : "__REPLACE__ME__"
+    },
+    "db" : {
+        "host": "127.0.0.1",
+        "database": "task-manager",
+        "port": 27017
+    }
+}

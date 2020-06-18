@@ -1,11 +1,15 @@
+'use strict';
+
 const express = require('express');
 const multer = require('multer');
 require('./db/mongoose');
+const config = require('./util/config');
+
 const userRouter = require('./routes/user');
 const taskRouter = require('./routes/task');
 
 const app = express();
-const port = 8080;
+const port = config.get('port');
 
 app.use(express.json());
 app.use(userRouter);

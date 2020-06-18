@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-// const connection_url = process.env.MONGODB_URL
-const connection_url = "mongodb://localhost:27017/task-manager"
+const config = require('../util/config');
+
+const connection_url = `mongodb://${config.get('db:host')}:${config.get('db:port')}/${config.get('db:database')}`
 
 mongoose.connect(connection_url, {
     useNewUrlParser : true,
