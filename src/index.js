@@ -4,6 +4,7 @@ const express = require('express');
 const multer = require('multer');
 require('./db/mongoose');
 const config = require('./util/config');
+const logger = require('./util/logger').getLogger('core');
 
 const userRouter = require('./routes/user');
 const taskRouter = require('./routes/task');
@@ -20,7 +21,7 @@ const upload = multer({
 });
 
 app.listen(port, () => {
-  console.log('Server is up on port ' + port);
+  logger.info('Server is up on port ' + port);
 });
 
 

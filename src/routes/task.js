@@ -1,7 +1,7 @@
 const express = require('express');
 const Task = require('../models/task.js');
 const auth = require('../middleware/auth');
-
+const logger = require('../util/logger').getLogger('TaskRoute');
 const router = express.Router();
 
 router.post('/tasks', auth, async (req, res) => {
@@ -15,6 +15,7 @@ router.post('/tasks', auth, async (req, res) => {
         await task.save();
         res.status(201).send(task);
     } catch(e) {
+        logger.error(e);
         res.status(400).send(e);
     }
 
@@ -44,6 +45,7 @@ router.get('/tasks', auth, async (req, res) => {
         }).execPopulate()
         res.send(req.user.tasks)
     } catch (e) {
+        logger.error(e);
         res.status(500).send()
     }
 })
@@ -59,6 +61,7 @@ router.get('/task/:id', auth, async (req, res) => {
 
       res.status(200).send(task);
   } catch(e) {
+      logger.error(e);
       res.status(400).send(e);
   }
 
@@ -88,6 +91,7 @@ router.patch('/tasks/:id', auth, async (req, res) => {
       res.send(task);
 
   }catch(e){
+      logger.error(e);
       res.status(400).send();
   }
 });
@@ -103,6 +107,7 @@ router.delete('/tasks/:id', auth, async (req, res) => {
         res.send(task);
 
     } catch(e){
+        logger.error(e);
         res.status(500).send(e);
     }
 });

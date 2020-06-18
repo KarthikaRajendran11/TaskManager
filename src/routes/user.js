@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../models/user.js');
 const multer = require('multer');
 const email = require('../emails/account');
+const logger = require('../util/logger').getLogger('UserRoute');
 
 const router = new express.Router();
 const auth = require('../middleware/auth');
@@ -27,6 +28,7 @@ router.post('/users', async (req, res) => {
         email.sendWelcomeEmail(user.email);
         res.status(201).send({user, token});
     } catch(e){
+        logger.error(e);
         res.status(400).send(e);
     }
 
@@ -38,6 +40,7 @@ router.post('/users/login', async (req, res) => {
         const token = await user.generateAuthToken();
         res.send({user, token});
       } catch(e) {
+        logger.error(e);
         res.status(400).send();
       }
 });
@@ -50,6 +53,7 @@ router.post('/users/logout', auth, async (req, res) => {
         await req.user.save()
         res.status(200).send()
     } catch(e) {
+        logger.error(e);
         res.status(500).send()
     }
 });
@@ -60,11 +64,12 @@ router.post('/users/logoutAll', auth, async(req, res) => {
         await req.user.save()
         res.send()
     } catch(e) {
+        logger.error(e);
         res.status(500).send()
     }
 });
 
-router.patch('/users/me', auth, async (req, res) => {
+router.patch('/users/me', auth, async (req, res) => { 
   const updates = Object.keys(req.body)
   const allowedUpdates = ['name', 'email', 'password', 'age']
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -81,6 +86,7 @@ router.patch('/users/me', auth, async (req, res) => {
       await req.user.save();
       res.send(req.user)
   } catch (e) {
+      logger.error(e);
       res.status(400).send(e)
   }
 });
@@ -98,6 +104,7 @@ router.delete('/users/me', auth, async (req, res) => {
       await req.user.remove()
       res.send(req.user);
     } catch(e){
+      logger.error(e);
       res.status(500).send(e);
     }
 
@@ -126,6 +133,7 @@ router.get('/users/:id/avatar', auth, async (req, res) => {
     res.set('Content-Type', 'image/jpg')
     res.send(user.avatar)
   } catch(e) {
+    logger.error(e);
     res.status(400).send()
   }
 });
