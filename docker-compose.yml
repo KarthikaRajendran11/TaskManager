@@ -1,0 +1,25 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - port=8080
+      - sendGrid__sendgridAPIKey=replace_me
+      - sendGrid__fromEmail=replace_me
+      - db__host=mongodb
+      - db__database=mongodb
+      - db__port=27017
+    depends_on:
+      - mongodb
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    command: node src/index.js
+  mongodb:
+    container_name: mongodb
+    image: mongo:4.2-bionic
+    ports: 
+      - "27017"
