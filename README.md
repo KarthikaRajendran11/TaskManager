@@ -14,6 +14,16 @@ Sendgrid:
 
 - Create an account at https://signup.sendgrid.com/ and create an API key and add to config file
 
+# To run app in docker
+
+- Install Docker
+- Run `make up` from terminal
+- To hit routes, follow the pattern mentioned below
+
+`curl -X POST 'http://127.0.0.1:8080/users' -d '{"name": "abc", "email": "abc@gmail.com", "password" : "secret9@"}' -H "Content-Type: application/json"`
+
+
+
 # To run the app:
 
 node install
