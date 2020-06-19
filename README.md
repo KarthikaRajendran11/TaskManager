@@ -1,8 +1,8 @@
-# TaskManager
+## TaskManager
 
 App where users can register, login and add tasks. 
 
-DB : MongDB
+### DB : MongDB
 
 - Download mongodb community server from https://www.mongodb.com/try/download/community and unzip and move to any location. 
 - Create another folder in the same directory 
@@ -10,11 +10,11 @@ DB : MongDB
 
 /Users/user/mongodb/bin/mongod --dbpath=/Users/user/mongodb-data
 
-Sendgrid:
+### Sendgrid:
 
 - Create an account at https://signup.sendgrid.com/ and create an API key and add to config file
 
-# To run app in docker
+## To run app in docker
 
 - Install Docker
 - Run `make up` from terminal
@@ -22,42 +22,21 @@ Sendgrid:
 
 `curl -X POST 'http://127.0.0.1:8080/users' -d '{"name": "abc", "email": "abc@gmail.com", "password" : "secret9@"}' -H "Content-Type: application/json"`
 
-
-
-# To run the app:
+## To run the app:
 
 node install
 u
 npm run dev
 
-# APIs:
+## APIs:
 
-# To add users:
+### Register new users:
 
-POST /users
+`curl -X POST 'http://127.0.0.1:8080/users' -d '{"name": "abc", "email": "abc@gmail.com", "password" : "secret9@"}' -H "Content-Type: application/json"`
 
-{
-	"name" : "any_name",
-	"email" : "any_email_id",
-	"password" : "any_password"
-}
+### Login:
 
-# Header:
-
-{
-  "Authorization" : "Bearer __token"
-}
-
-__token generated via POST /users/login API
-
-# To login:
-
-POST /users/login
-
-{
-  "email" : "users_email_id",
-  "password" : "users_password"
-}
+`curl -X POST 'http://127.0.0.1:8080/users/login' -d '{"email": "abc@gmail.com", "password" : "secret9@"}' -H "Content-Type: application/json"`
 
 Response:
 
@@ -74,14 +53,9 @@ Response:
     "token": "string"
 }
 
-# To add tasks for a user:
+### To add tasks for a user:
 
-POST /tasks
-
-{
-	"description" : "string",
-	"completed" : boolean
-}
+`curl -X POST 'http://127.0.0.1:8080/tasks' -d '{"description" : "Learn something new everyday", "completed" : false}' -H "Content-Type: application/json" -H "Content-Type: Authorization __token"`
 
 Response:
 
@@ -95,40 +69,30 @@ Response:
     "__v": int
 }
 
-# To logout:
+### To logout:
 
-POST /users/logout
+`curl -X POST 'http://127.0.0.1:8080/users/logout' -H "Content-Type: application/json" -H "Content-Type: Authorization __token"`
 
-# To logout of all sessions:
+### To logout of all sessions:
 
-POST /users/logoutAll
+`curl -X POST 'http://127.0.0.1:8080/users/logoutAll' -H "Content-Type: application/json" -H "Content-Type: Authorization __token"`
 
-# To update user:
+### To update user:
 
-PATCH /users/me
+`curl -X PATCH 'http://127.0.0.1:8080/users/me' -d '{"age" : 12, "name": "ABC", "email" : "ABC@gmail.com", "password" : "topSecret77"}'  -H "Content-Type: application/json" -H "Content-Type: Authorization __token"`
 
-{
-	"age" : int  // or any parameter to be modified
-}
+### To update task:
 
-# To update task:
+`curl -X PATCH 'http://127.0.0.1:8080/tasks/{taskId}' -d '{"description" : "Update tasks", "completed" : true}'  -H "Content-Type: application/json" -H "Content-Type: Authorization __token"`
 
-PATCH /tasks/{taskId}
+### To upload a profile pic:
 
-{
-	"description" : string
-}
+`curl -X POST 'http://127.0.0.1:8080/users/me/avatar' -F image=avatar.jpg -H "Content-Type: Authorization __token"`
 
-# To upload a profile pic:
+### To delete a user:
 
-POST /users/me/avatar
+`curl -X DELETE 'http://127.0.0.1:8080/users/{userId}' -H "Content-Type: Authorization __token"`
 
-form-data : "avatar" : choose any file to upload
+### To delete a task:
 
-# To delete a user:
-
-DEL /users/{userId}
-
-# To delete a task:
-
-DEL /tasks/{taskId}
+`curl -X DELETE 'http://127.0.0.1:8080/tasks/{taskId}' -H "Content-Type: Authorization __token"`
