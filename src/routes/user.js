@@ -6,6 +6,7 @@ const logger = require('../util/logger').getLogger('UserRoute');
 const err = require('../util/error');
 const router = new express.Router();
 const auth = require('../middleware/auth');
+const frisk = require('express-frisk');
 
 const upload = multer({
   limits : {
@@ -19,7 +20,24 @@ const upload = multer({
   }
 });
 
-router.post('/users', async (req, res) => {
+router.post('/users', frisk.validateRequest({
+    name: {
+        required: true,
+        type: frisk.types.string,
+        in: 'body'
+    },
+    email: {
+        required: true,
+        type: frisk.types.string,
+        in: 'body'
+    },
+    password: {
+        required: true,
+        type: frisk.types.string,
+        in: 'body'
+    },
+  }), 
+  async (req, res) => {
     const user = new User(req.body);
 
     try {
@@ -34,7 +52,19 @@ router.post('/users', async (req, res) => {
 
   });
 
-router.post('/users/login', async (req, res) => {
+router.post('/users/login', frisk.validateRequest({    
+    email: {
+        required: true,
+        type: frisk.types.string,
+        in: 'body'
+    },
+    password: {
+        required: true,
+        type: frisk.types.string,
+        in: 'body'
+    }
+  }),
+  async (req, res) => {
       try {
         const user = await User.findByCredentials(req.body.email, req.body.password);
         const token = await user.generateAuthToken();
@@ -69,27 +99,39 @@ router.post('/users/logoutAll', auth, async(req, res) => {
     }
 });
 
-router.patch('/users/me', auth, async (req, res) => { 
-  const updates = Object.keys(req.body)
-  const allowedUpdates = ['name', 'email', 'password', 'age']
-  const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
-
-  if (!isValidOperation) {
-      
-      return res.status(400).send(new err.user.invalidUpdates());
-  }
-
-  try {
-
-      updates.forEach((update) => {
-        req.user[update] = req.body[update];
-      });
-      await req.user.save();
-      res.send(req.user)
-  } catch (e) {
-      logger.error(e);
-      res.status(400).send(e)
-  }
+router.patch('/users/me', auth, frisk.validateRequest({
+      name: {
+          required: false,
+          type: frisk.types.string,
+          in: 'body'
+      },
+      email: {
+          required: false,
+          type: frisk.types.string,
+          in: 'body'
+      },
+      password: {
+          required: false,
+          type: frisk.types.string,
+          in: 'body'
+      },
+      age: {
+        required: false,
+        type: frisk.types.integer,
+        in: 'body'
+    }
+  }), 
+  async (req, res) => { 
+    try {
+        Object.keys(req.body).forEach((update) => {
+          req.user[update] = req.body[update];
+        });
+        await req.user.save();
+        res.send(req.user)
+    } catch (e) {
+        logger.error(e);
+        res.status(400).send(e)
+    }
 });
 
 router.get('/users/me', auth, async (req, res) => {
@@ -125,18 +167,19 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) 
   res.status(400).send({error : error.message});
 });
 
-router.get('/users/:id/avatar', auth, async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id)  
-    if(!user){
-     throw new Error();
+router.get('/users/:id/avatar', auth, 
+  async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id)  
+      if(!user){
+      throw new Error();
+      }
+      res.set('Content-Type', 'image/jpg')
+      res.send(user.avatar)
+    } catch(e) {
+      logger.error(e);
+      res.status(400).send()
     }
-    res.set('Content-Type', 'image/jpg')
-    res.send(user.avatar)
-  } catch(e) {
-    logger.error(e);
-    res.status(400).send()
-  }
 });
 
 module.exports = router;
