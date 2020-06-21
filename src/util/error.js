@@ -12,4 +12,8 @@ Err.user.invalidUpdates = Err.user.extend('Invalid parameters updated', 404, 'In
 Err.task = Err.extend('Unexpected error', 500, 'Internal server error');
 Err.task.InvalidTaskId = Err.task.extend('No task with id', 404, 'Invalida task id');
 
+Err.notes = Err.extend('Unable to save notes', 400, 'Improper format');
+Err.notes.NoNoteId = Err.notes.extend('No note id provided', 400, 'Unknown notes ID');
+Err.notes.NoOwnerId = Err.notes.extend('No owner id provided', 400, 'Unknown owner ID');
+
 module.exports = Err;

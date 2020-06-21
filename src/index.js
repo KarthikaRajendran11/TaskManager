@@ -8,6 +8,7 @@ const logger = require('./util/logger').getLogger('core');
 
 const userRouter = require('./routes/user');
 const taskRouter = require('./routes/task');
+const noteRouter = require('./routes/notes');
 
 const app = express();
 const port = config.get('port');
@@ -15,6 +16,7 @@ const port = config.get('port');
 app.use(express.json());
 app.use(userRouter);
 app.use(taskRouter);
+app.use(noteRouter);
 
 const upload = multer({
   dest: 'images'
