@@ -20,7 +20,7 @@
     "express": "^4.16.4",
     "express-frisk": "^0.1.2",
     "frisk": "0.0.0",
-    "jsonwebtoken": "^8.4.0",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.15",
     "loglevel": "^1.6.8",
     "mocha": "^8.0.1",
